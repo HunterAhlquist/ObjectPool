@@ -3,6 +3,13 @@ package structure;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A generic object pool class
+ * @param <T> The object that will be pooled.
+ *
+ * @author Hunter Ahlquist and Mark Mendoza
+ * @version 1.0
+ */
 abstract class ObjectPool<T> {
     private static final int INITIAL_POOL_SIZE = 10;
     private static final int MAX_OBJECT_COUNT = 20;
@@ -14,13 +21,15 @@ abstract class ObjectPool<T> {
         available = new ArrayList<>();
         active = new ArrayList<>();
 
-        //add initial objects, up to initial pool size
         for (int i = 0; i < INITIAL_POOL_SIZE; i++)
         {
             available.add(create());
         }
     }
 
+    /**
+     * @return Return the object instantiated
+     */
     abstract T create();
 
 
@@ -32,13 +41,9 @@ abstract class ObjectPool<T> {
     public T makeActive() {
         //Check empty
         if (available.isEmpty()) {
-            //System.out.println("available is empty");
-            //if there is room to create more objects
             if (allSize() < MAX_OBJECT_COUNT) {
-                //System.out.println("Less than max objects, creating new object...");
                 available.add(create());
             } else {
-                //System.out.println("Max reached, return null");
                 return null;
             }
         }
@@ -48,17 +53,36 @@ abstract class ObjectPool<T> {
         active.add(object);
         return object;
     }
+
+    /**
+     * Make a pooled object available for use
+     * @param oldObject the object to be recycled
+     */
     public void makeAvailable(T oldObject) {
         active.remove(oldObject);
         available.add(oldObject);
     }
 
+    /**
+     * The amount of objects that are available to be used
+     * @return number of available objects
+     */
     public int availableSize() {
         return available.size();
     }
+
+    /**
+     * The amount of objects that are being used
+     * @return number of objects actively being used
+     */
     public int activeSize() {
         return active.size();
     }
+
+    /**
+     * The total amount of objects in the pool
+     * @return the total number of objects
+     */
     public int allSize() {
         return active.size() + available.size();
     }

@@ -1,7 +1,11 @@
 package structure;
 
-import driver.Main;
-
+/**
+ * An object pool based class for the Enemy class
+ *
+ * @author Hunter Ahlquist and Mark Mendoza
+ * @version 1.0
+ */
 public class EnemyPool extends ObjectPool<Enemy> {
 
     @Override
@@ -9,9 +13,11 @@ public class EnemyPool extends ObjectPool<Enemy> {
         return new Enemy("Test Enemy #" + allSize());
     }
 
-
-    public Enemy resetObject(Enemy enemy) {
+    /**
+     * Reset the enemy object as if it was re-instantiated
+     * @param enemy the enemy object to reset
+     */
+    public void resetObject(Enemy enemy) {
         enemy.reset();
-        return enemy;
     }
 }
